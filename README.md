@@ -28,4 +28,4 @@ var BlankLine = Times(2, NewLine) // \n\n
 
 To implement a parser implement the `Parser[T]` type alias, a function that takes an `Input` and returns `(T, bool, error)`. Each parser should attempt to parse the `Input` and roll back if it is unable to find what it is looking for.
 
-You can find examples in the [`time`](./time) package.
+You can find examples in the [`time`](./time) package. Full documentation is available here [Godoc](https://pkg.go.dev/github.com/liamawhite/parse).
