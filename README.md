@@ -16,7 +16,7 @@ The packages are designed to be composable via dot import. Dot imports are gener
 
 import (
     . "github.com/liamawhite/parse/core"
-    // . "github.com/liamawhite/parse/time" whichever other packages you may need
+    // . "github.com/liamawhite/parse/time" any other packages you may need
 )
 
 var BlankLine = Times(2, NewLine) // \n\n
