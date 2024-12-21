@@ -17,32 +17,32 @@ package core_test
 import (
 	"testing"
 
-	"github.com/liamawhite/parse/core"
+	. "github.com/liamawhite/parse/core"
 	. "github.com/liamawhite/parse/test"
 )
 
 func TestOr(t *testing.T) {
-	tests := []ParserTest[core.Tuple2[core.Match[string], core.Match[string]]]{
+	tests := []ParserTest[Tuple2[Match[string], Match[string]]]{
 		{
 			Name:           "no match",
 			Input:          "C",
-			Parser:         core.Or(core.Rune('A'), core.Rune('B')),
-			ExpectedMatch:  core.NewTuple2[core.Match[string], core.Match[string]](nil, nil),
+			Parser:         Or(Rune('A'), Rune('B')),
+			ExpectedMatch:  NewTuple2(NewMatch("", false), NewMatch("", false)),
 			ExpectedOK:     false,
 			RemainingInput: "C",
 		},
 		{
 			Name:          "first match",
 			Input:         "A",
-			Parser:        core.Or(core.Rune('A'), core.Rune('B')),
-			ExpectedMatch: core.NewTuple2[core.Match[string], core.Match[string]](core.NewMatch("A", true), nil),
+			Parser:        Or(Rune('A'), Rune('B')),
+			ExpectedMatch: NewTuple2[Match[string], Match[string]](NewMatch("A", true), nil),
 			ExpectedOK:    true,
 		},
 		{
 			Name:          "second match",
 			Input:         "B",
-			Parser:        core.Or(core.Rune('A'), core.Rune('B')),
-			ExpectedMatch: core.NewTuple2[core.Match[string]](nil, core.NewMatch("B", true)),
+			Parser:        Or(Rune('A'), Rune('B')),
+			ExpectedMatch: NewTuple2(NewMatch("", false), NewMatch("B", true)),
 			ExpectedOK:    true,
 		},
 	}
