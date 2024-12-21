@@ -24,8 +24,8 @@ func Or[A any, B any](a Parser[A], b Parser[B]) Parser[Tuple2[Match[A], Match[B]
 		if errA != nil {
 			return res, false, errA
 		}
+		res.A = NewMatch(matchA, okA)
 		if okA {
-			res.A = NewMatch(matchA, true)
 			return res, true, nil
 		}
 
@@ -33,8 +33,8 @@ func Or[A any, B any](a Parser[A], b Parser[B]) Parser[Tuple2[Match[A], Match[B]
 		if errB != nil {
 			return res, false, errB
 		}
+		res.B = NewMatch(matchB, okB)
 		if okB {
-			res.B = NewMatch(matchB, true)
 			return res, true, nil
 		}
 
