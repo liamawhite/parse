@@ -14,6 +14,10 @@
 
 package core
 
+import (
+	"strings"
+)
+
 // Use unexported type alias so we control the interface and prevent people doing arbirary things e.g. use negative ints.
 type checkpoint int
 
@@ -22,6 +26,7 @@ type Input interface {
 	Take(n int) (string, bool)
 	Checkpoint() checkpoint
 	Restore(cp checkpoint)
+	Debug() string
 }
 
 type input struct {
@@ -65,4 +70,13 @@ func (i *input) Checkpoint() checkpoint {
 // Restore the parsing position to a previous snapshot
 func (i *input) Restore(cp checkpoint) {
 	i.index = int(cp)
+}
+
+// Outputs the full input string with a marker at the current parsing position
+func (i *input) Debug() string {
+	var s strings.Builder
+	s.WriteString(i.s[:i.index])
+	s.WriteString("☝️")
+	s.WriteString(i.s[i.index:])
+	return s.String()
 }
