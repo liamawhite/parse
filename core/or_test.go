@@ -32,6 +32,14 @@ func TestOr(t *testing.T) {
 			RemainingInput: "C",
 		},
 		{
+			Name:           "no match rolls back input even if one of the parsers consumed input",
+			Input:          "C",
+			Parser:         Or(NaughtyParser[string](), Rune('C')),
+			ExpectedMatch:  NewTuple2(NewMatch("", false), NewMatch("", false)),
+			ExpectedOK:     false,
+			RemainingInput: "C",
+		},
+		{
 			Name:          "first match",
 			Input:         "A",
 			Parser:        Or(Rune('A'), Rune('B')),

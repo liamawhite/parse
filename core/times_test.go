@@ -38,6 +38,13 @@ func TestTime(t *testing.T) {
 			ExpectedOK:    true,
 		},
 		{
+			Name:           "Times: no match rolls back input even if one of the parsers consumed input",
+			Input:          "AC",
+			Parser:         core.Times(2, NaughtyParser[string]()),
+			ExpectedOK:     false,
+			RemainingInput: "AC",
+		},
+		{
 			Name:          "Between: at least 1 up to 5 with 4",
 			Input:         "AAAA",
 			Parser:        core.Between(1, 5, core.Rune('A')),

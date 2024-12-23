@@ -18,6 +18,7 @@ package core
 // It returns as soon as one of the parsers are successful or rolls back when none are.
 func Or[A any, B any](a Parser[A], b Parser[B]) Parser[Tuple2[Match[A], Match[B]]] {
 	return func(in Input) (Tuple2[Match[A], Match[B]], bool, error) {
+		start := in.Checkpoint()
 		var res tuple2[Match[A], Match[B]]
 
 		matchA, okA, errA := a(in)
@@ -38,6 +39,7 @@ func Or[A any, B any](a Parser[A], b Parser[B]) Parser[Tuple2[Match[A], Match[B]
 			return res, true, nil
 		}
 
+		in.Restore(start)
 		return res, false, nil
 	}
 }
