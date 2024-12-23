@@ -17,6 +17,7 @@ package core
 // Any looks for matches in the given parsers, returning the first match or rolls back the input if no match is found.
 func Any[T any](parsers ...Parser[T]) Parser[T] {
 	return func(in Input) (T, bool, error) {
+		start := in.Checkpoint()
 		for _, parser := range parsers {
 			match, ok, err := parser(in)
 			if err != nil || ok {
@@ -24,6 +25,7 @@ func Any[T any](parsers ...Parser[T]) Parser[T] {
 			}
 		}
 		var t T
+		in.Restore(start)
 		return t, false, nil
 	}
 }

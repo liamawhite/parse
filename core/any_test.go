@@ -31,6 +31,13 @@ func TestAny(t *testing.T) {
 			RemainingInput: "C",
 		},
 		{
+			Name:           "no match rolls back input even if one of the parsers consumed input",
+			Input:          "C",
+			Parser:         core.Any(NaughtyParser[string](), core.Rune('C')),
+			ExpectedOK:     false,
+			RemainingInput: "C",
+		},
+		{
 			Name:          "match",
 			Input:         "B",
 			Parser:        core.Any(core.Rune('A'), core.Rune('B')),

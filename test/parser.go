@@ -17,14 +17,14 @@ package core_test
 import (
 	"testing"
 
-	"github.com/liamawhite/parse/core"
+	. "github.com/liamawhite/parse/core"
 	"github.com/stretchr/testify/assert"
 )
 
 type ParserTest[T any] struct {
 	Name           string
 	Input          string
-	Parser         core.Parser[T]
+	Parser         Parser[T]
 	ExpectedMatch  T
 	ExpectedOK     bool
 	WantErr        bool
@@ -34,7 +34,7 @@ type ParserTest[T any] struct {
 func RunTests[T any](t *testing.T, tests []ParserTest[T]) {
 	for _, test := range tests {
 		t.Run(test.Name, func(t *testing.T) {
-			in := core.NewInput(test.Input)
+			in := NewInput(test.Input)
 			match, ok, err := test.Parser(in)
 			assert.Equal(t, test.ExpectedOK, ok)
 			assert.Equal(t, test.ExpectedMatch, match)
@@ -44,7 +44,7 @@ func RunTests[T any](t *testing.T, tests []ParserTest[T]) {
 				assert.NoError(t, err)
 			}
 
-			remaining, _, _ := core.StringWhileNot(core.EOF[string]())(in)
+			remaining, _, _ := StringWhileNot(EOF[string]())(in)
 			assert.Equal(t, test.RemainingInput, remaining)
 		})
 	}
@@ -59,4 +59,14 @@ func CaPiTaLiZe(s string) string {
 		}
 	}
 	return string(runes)
+}
+
+// NaughtyParser parser consumes input but does not rollback
+// This is useful for testing that combinators rollback input correctly
+func NaughtyParser[T any]() Parser[T] {
+	return func(in Input) (T, bool, error) {
+		in.Take(1)
+		var res T
+		return res, false, nil
+	}
 }
