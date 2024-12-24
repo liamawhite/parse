@@ -36,16 +36,20 @@ func RunTests[T any](t *testing.T, tests []ParserTest[T]) {
 		t.Run(test.Name, func(t *testing.T) {
 			in := NewInput(test.Input)
 			match, ok, err := test.Parser(in)
-			assert.Equal(t, test.ExpectedOK, ok)
-			assert.Equal(t, test.ExpectedMatch, match)
-			if test.WantErr {
-				assert.Error(t, err)
+			if test.ExpectedOK {
+				assert.True(t, ok, "Expected match")
 			} else {
-				assert.NoError(t, err)
+				assert.False(t, ok, "Expected no match")
+			}
+			assert.Equal(t, test.ExpectedMatch, match, "Expected result doesn't match")
+			if test.WantErr {
+				assert.Error(t, err, "Expected error")
+			} else {
+				assert.NoError(t, err, "Expected no error")
 			}
 
 			remaining, _, _ := StringWhileNot(EOF[string]())(in)
-			assert.Equal(t, test.RemainingInput, remaining)
+			assert.Equal(t, test.RemainingInput, remaining, "Remaining input doesn't match")
 		})
 	}
 }
