@@ -41,11 +41,11 @@ func NewInput(s string) Input {
 }
 
 func (i *input) Peek(n int) (s string, ok bool) {
-	if i.index+n > len(i.s) {
+	if i.index+n > len(i.s) || i.index+n < 0 {
 		return
 	}
 	if n < 0 {
-		return i.s[i.index:], true
+		return i.s[i.index+n : i.index], true
 	}
 	return i.s[i.index : i.index+n], true
 }
