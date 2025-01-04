@@ -95,5 +95,16 @@ func TestInput(t *testing.T) {
 		assert.False(t, ok)
 		assert.Equal(t, "", s)
 	})
+	t.Run("Restore negative int", func(t *testing.T) {
+		i.Take(10)
+		i.Restore(-1)
+		assert.Equal(t, 0, i.Checkpoint())
+	})
+	t.Run("Restore beyond end", func(t *testing.T) {
+		i.Restore(len(input))
+		assert.Equal(t, len(input), i.Checkpoint())
+		_, ok := i.Peek(1)
+		assert.False(t, ok)
+	})
 
 }
