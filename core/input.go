@@ -18,14 +18,11 @@ import (
 	"strings"
 )
 
-// Use unexported type alias so we control the interface and prevent people doing arbirary things e.g. use negative ints.
-type checkpoint int
-
 type Input interface {
 	Peek(n int) (string, bool)
 	Take(n int) (string, bool)
-	Checkpoint() checkpoint
-	Restore(cp checkpoint)
+	Checkpoint() int
+	Restore(checkpoint int)
 	Debug() string
 }
 
@@ -63,13 +60,19 @@ func (i *input) Take(n int) (s string, ok bool) {
 }
 
 // Take a snapshot of the current parsing position
-func (i *input) Checkpoint() checkpoint {
-	return checkpoint(i.index)
+func (i *input) Checkpoint() int {
+	return i.index
 }
 
 // Restore the parsing position to a previous snapshot
-func (i *input) Restore(cp checkpoint) {
-	i.index = int(cp)
+func (i *input) Restore(checkpoint int) {
+	if checkpoint < 0 {
+		checkpoint = 0
+	}
+	if checkpoint > len(i.s) {
+		checkpoint = len(i.s)
+	}
+	i.index = checkpoint
 }
 
 // Outputs the full input string with a marker at the current parsing position
